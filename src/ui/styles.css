@@ -117,4 +117,62 @@ input:focus,select:focus{border-color:#85a38a;box-shadow:0 0 0 3px #e9efe5}
 @media(min-width:701px){.mobile-dashboard{max-width:980px;margin:28px auto 50px}.mobile-empty-card{max-width:600px}.mobile-today-card{max-width:700px}.install-card{max-width:700px}.bottom-navigation{display:none}}
 @media(min-width:701px) and (max-width:1000px){.page-shell{padding-left:25px;padding-right:25px}.mobile-dashboard{margin-top:23px}.mobile-today-card{max-width:none}.workspace-grid{gap:12px}.panel{padding:18px}.topbar nav .nav-link{padding:0 7px;font-size:11px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
-@media(max-width:380px){.page-shell{padding:0 14px}.top-cta{font-size:9px}.brand{font-size:12px}.brand small{font-size:9px}.form-row{gap:8px}.recipe-grid{gap:7px}.recipe-card-body{padding:8px}}
+@media(max-width:380px){.page-shell{padding:env(safe-area-inset-top) 14px 0}.top-cta{font-size:9px}.brand{font-size:12px}.brand small{font-size:9px}.form-row{gap:8px}.recipe-grid{gap:7px}.recipe-card-body{padding:8px}}
+
+.page-shell,.workspace-grid,.workspace-grid>* ,.right-column,.panel,.recipe-grid,.recipe-card,.shopping-layout,.shopping-panel,.recipe-modal{min-width:0}
+.topbar{min-width:0}
+.topbar nav .nav-link.active{background:var(--light-green);color:var(--green);font-weight:700}
+.recipe-link,.recipe-card-title,.mobile-today-meal strong,.shopping-name,.recipe-modal h2,.recipe-modal p,.steps-list li{overflow-wrap:anywhere;word-break:normal}
+.shopping-list li label{min-width:0}
+.shopping-name{min-width:0;white-space:normal}
+.shopping-amount{flex:none}
+.shopping-list input:focus-visible+.checkmark{outline:3px solid #bbd1aa;outline-offset:3px}
+.day-header,.shopping-title{min-width:0;gap:10px}
+.day-header>div,.shopping-title>div{min-width:0}
+.target-deviation,.target-source-note{font-size:10px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.target-source-note{margin:4px 0 0;font-size:9px}
+.recipe-card-title{white-space:normal;min-height:44px;max-width:100%}
+.macro-line{min-width:0}
+.mobile-today-meal strong{white-space:normal}
+.mobile-open-plan,.mobile-empty-card .primary-button{min-width:0;text-align:left}
+.recipe-modal{max-height:min(85dvh,850px);overscroll-behavior:contain;scrollbar-gutter:stable}
+.recipe-modal>*{max-width:100%}
+.modal-close{width:44px;height:44px;min-width:44px;min-height:44px;display:grid;place-items:center}
+.modal-backdrop{overscroll-behavior:contain}
+.bottom-navigation{padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+.bottom-nav-item{min-width:0}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #789b6d;outline-offset:2px}
+
+@media(max-width:700px){
+  #menu{scroll-margin-top:calc(env(safe-area-inset-top) + 72px)}
+  .topbar{gap:8px}
+  .topbar .brand{min-width:0;flex:1}
+  .topbar .brand>span:last-child{min-width:0}
+  .topbar .install-cta{max-width:46%;white-space:normal;line-height:1.2;text-align:center;flex:none}
+  .modal-backdrop{z-index:12;place-items:end center;padding:env(safe-area-inset-top) 0 0}
+  .recipe-modal{width:100%;max-height:calc(100dvh - env(safe-area-inset-top) - 8px);padding:24px 19px calc(26px + env(safe-area-inset-bottom));}
+  .recipe-modal h2{padding-right:4px}
+  .shopping-title{align-items:flex-start}
+  .shopping-count{flex:none}
+  .shopping-name{line-height:1.4}
+}
+@media(max-width:360px){
+  .page-shell{padding-left:13px;padding-right:13px}
+  .topbar{margin-left:-13px;margin-right:-13px;padding-left:13px;padding-right:13px}
+  .profile-panel,.shopping-panel{padding:13px}
+  .mobile-today-heading{gap:8px}
+  .mobile-today-heading h2{max-width:190px;line-height:1.25}
+  .mobile-macro-grid{justify-content:space-between}
+  .shopping-title{gap:6px}
+  .shopping-count{padding:6px 7px}
+  .recipe-grid{gap:7px}
+  .recipe-card-title{font-size:11px;min-height:48px}
+  .tabs button{padding-left:6px;padding-right:6px}
+}
+@media(max-width:330px){
+  .topbar .brand small{display:none}
+  .topbar .install-cta{max-width:42%;padding-left:6px;padding-right:6px}
+  .mobile-today-heading h2{max-width:150px}
+  .panel-heading{align-items:flex-start}
+  .day-header{align-items:flex-start}
+}

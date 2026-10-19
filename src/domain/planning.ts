@@ -17,6 +17,11 @@ export function getMealLabel(type: MealType): string {
   return mealLabels[type];
 }
 
+export function calculateKcalDeviation(actualKcal: number, targetKcal: number): number | null {
+  if (!Number.isFinite(actualKcal) || !Number.isFinite(targetKcal) || targetKcal <= 0) return null;
+  return actualKcal - targetKcal;
+}
+
 export function buildMealPlan(recipes: Recipe[], profile: NutritionProfile, days: number, mealsPerDay: number): PlannedDay[] {
   if (![1, 3, 7, 14].includes(days)) throw new Error("Продолжительность плана должна быть 1, 3, 7 или 14 дней.");
   if (!Number.isInteger(mealsPerDay) || mealsPerDay < 2 || mealsPerDay > 6) {

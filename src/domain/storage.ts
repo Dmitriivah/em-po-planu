@@ -7,6 +7,7 @@ export type AppState = {
   duration: number;
   mealsPerDay: number;
   checkedShoppingItems: string[];
+  favorites: string[];
 };
 
 export type LoadedState = { state: AppState; warning?: string };
@@ -14,7 +15,7 @@ export type LoadedState = { state: AppState; warning?: string };
 const STORAGE_KEY = "em-po-planu:v1";
 
 function emptyState(): AppState {
-  return { days: [], duration: 3, mealsPerDay: 3, checkedShoppingItems: [] };
+  return { days: [], duration: 3, mealsPerDay: 3, checkedShoppingItems: [], favorites: [] };
 }
 
 function isStringArray(value: unknown): value is string[] {
@@ -52,7 +53,7 @@ function isPlan(value: unknown): value is PlannedDay[] {
   });
 }
 
-function isAppState(value: unknown): value is AppState {
+function isAppStateCore(value: unknown): value is Omit<AppState, "favorites"> & { favorites?: unknown } {
   if (typeof value !== "object" || value === null) return false;
   const state = value as Record<string, unknown>;
   return (state.profile === undefined || isProfile(state.profile)) &&
@@ -62,6 +63,12 @@ function isAppState(value: unknown): value is AppState {
     Number(state.mealsPerDay) >= 2 &&
     Number(state.mealsPerDay) <= 6 &&
     isStringArray(state.checkedShoppingItems);
+}
+
+function damagedFavoritesState(state: Omit<AppState, "favorites"> & { favorites?: unknown }): LoadedState {
+  const warning = "Не удалось прочитать избранное. Профиль, меню и отметки покупок сохранены; избранное сброшено.";
+  console.error(warning);
+  return { state: { ...state, favorites: [] }, warning };
 }
 
 function unreadableState(): LoadedState {
@@ -75,7 +82,11 @@ export function loadState(): LoadedState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { state: emptyState() };
     const parsed: unknown = JSON.parse(raw);
-    if (isAppState(parsed)) return { state: parsed };
+    if (isAppStateCore(parsed)) {
+      if (parsed.favorites === undefined) return { state: { ...parsed, favorites: [] } };
+      if (isStringArray(parsed.favorites)) return { state: { ...parsed, favorites: parsed.favorites } };
+      return damagedFavoritesState(parsed);
+    }
     return unreadableState();
   } catch (error) {
     console.error("Не удалось восстановить локальные данные.", error);

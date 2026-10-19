@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { calculateBmr, calculateTargetKcal, calculateTdee, macroEnergy, validateProfile, type NutritionProfile } from "./nutrition";
-import { buildMealPlan, calculateDayNutrition, replacePlannedMeal } from "./planning";
+import { buildMealPlan, calculateDayNutrition, calculateKcalDeviation, replacePlannedMeal } from "./planning";
 import { calculateRecipeNutrition, recipes, recipeMatchesRestrictions } from "./recipes";
 import { calculatePackageCost } from "./pricing";
 import { buildShoppingList } from "./shopping";
@@ -65,6 +65,19 @@ describe("nutrition calculations", () => {
   it("does not silently return fewer meal slots when restrictions remove a category", () => {
     expect(() => buildMealPlan(recipes, { ...profile, excludedIngredients: ["egg", "овсяные хлопья"] }, 1, 3))
       .toThrow("Не удалось подобрать: Завтрак");
+  });
+
+  it("keeps allergen restrictions when every recipe in a selected category is excluded", () => {
+    expect(() => buildMealPlan(recipes, { ...profile, allergies: ["молоко", "яйцо"] }, 1, 3))
+      .toThrow("аллергены не снимайте");
+  });
+
+  it("reports signed calorie deviations and does not invent a difference without a valid target", () => {
+    expect(calculateKcalDeviation(1800, 1800)).toBe(0);
+    expect(calculateKcalDeviation(1799.5, 1800)).toBe(-0.5);
+    expect(calculateKcalDeviation(1801, 1800)).toBe(1);
+    expect(calculateKcalDeviation(1800, 0)).toBeNull();
+    expect(calculateKcalDeviation(Number.NaN, 1800)).toBeNull();
   });
 
   it("does not calculate recipe nutrition using incompatible mass and volume units", () => {
